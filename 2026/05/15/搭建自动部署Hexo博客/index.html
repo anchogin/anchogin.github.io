@@ -20,12 +20,12 @@
   <title>通过Github搭建Hexo博客 - Anchogin's Blog</title>
 
   
-    <meta name="description" content="架构方案这个方案使用Hexo博客框架搭建，前端部署在Github Page上，后端使用Qexo编辑博客，部署在Vercel上。 工作流 Mermaid 图1234567891011121314151617181920212223flowchart TD    A[&quot;✍️ 博客作者&quot;] --&gt;|在线编辑&#x2F;发布文章| B[&quot;Qexo 后台\n（Vercel 部署）&amp;">
+    <meta name="description" content="架构方案这个方案使用Hexo博客框架搭建，前端部署在Github Page上，后端使用Qexo编辑博客，部署在Vercel上。 工作流 Mermaid 图flowchart TD     A[&quot;✍️ 博客作者&quot;] --&gt;|在线编辑&#x2F;发布文章| B[&quot;Qexo 后台\n（Vercel 部署）&quot;]     A --&gt;|本地 git push| C[&quot;GitHub 私有仓库\n（Hexo 源码 + Ma">
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过Github搭建Hexo博客">
 <meta property="og:url" content="http://example.com/2026/05/15/%E6%90%AD%E5%BB%BA%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2Hexo%E5%8D%9A%E5%AE%A2/">
 <meta property="og:site_name" content="Anchogin&#39;s Blog">
-<meta property="og:description" content="架构方案这个方案使用Hexo博客框架搭建，前端部署在Github Page上，后端使用Qexo编辑博客，部署在Vercel上。 工作流 Mermaid 图1234567891011121314151617181920212223flowchart TD    A[&quot;✍️ 博客作者&quot;] --&gt;|在线编辑&#x2F;发布文章| B[&quot;Qexo 后台\n（Vercel 部署）&amp;">
+<meta property="og:description" content="架构方案这个方案使用Hexo博客框架搭建，前端部署在Github Page上，后端使用Qexo编辑博客，部署在Vercel上。 工作流 Mermaid 图flowchart TD     A[&quot;✍️ 博客作者&quot;] --&gt;|在线编辑&#x2F;发布文章| B[&quot;Qexo 后台\n（Vercel 部署）&quot;]     A --&gt;|本地 git push| C[&quot;GitHub 私有仓库\n（Hexo 源码 + Ma">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s3.minio.anchogin.com/hexo/image/26/5/Qexo%E9%85%8D%E7%BD%AE_0cd0c17cc528c2566cfef1fe4aecd763.png">
 <meta property="og:image" content="https://s3.minio.anchogin.com/hexo/image/26/5/Qexo%E5%9B%BE%E5%BA%8A%E6%96%87%E4%BB%B6%E4%BF%9D%E5%AD%98%E8%B7%AF%E5%BE%84_953eb4cc3c3ff5418348befd1bdafb9c.png">
@@ -95,9 +95,74 @@
     
   </div>
   </div><article class="md-text content"><h1 id="架构方案"><a href="#架构方案" class="headerlink" title="架构方案"></a>架构方案</h1><p>这个方案使用Hexo博客框架搭建，前端部署在Github Page上，后端使用Qexo编辑博客，部署在Vercel上。</p>
-<h2 id="工作流-Mermaid-图"><a href="#工作流-Mermaid-图" class="headerlink" title="工作流 Mermaid 图"></a>工作流 Mermaid 图</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[&quot;✍️ 博客作者&quot;] --&gt;|在线编辑/发布文章| B[&quot;Qexo 后台\n（Vercel 部署）&quot;]</span><br><span class="line">    A --&gt;|本地 git push| C[&quot;GitHub 私有仓库\n（Hexo 源码 + Markdown）&quot;]</span><br><span class="line"></span><br><span class="line">    B --&gt;|API 推送文章| C</span><br><span class="line"></span><br><span class="line">    C --&gt;|push 事件触发| D[&quot;GitHub Actions\n（自动编译流水线）&quot;]</span><br><span class="line"></span><br><span class="line">    D --&gt;|hexo generate| E[&quot;编译生成静态文件\n（HTML/CSS/JS）&quot;]</span><br><span class="line"></span><br><span class="line">    E --&gt;|git push --force| F[&quot;GitHub 公有仓库\n（静态站点产物）&quot;]</span><br><span class="line"></span><br><span class="line">    F --&gt;|GitHub Pages| G[&quot;🌍 博客网站\n（用户访问）&quot;]</span><br><span class="line"></span><br><span class="line">    B -.-&gt;|管理/配置| C</span><br><span class="line"></span><br><span class="line">    style A fill:#f9f,stroke:#333,stroke-width:2px</span><br><span class="line">    style B fill:#00d1b2,stroke:#333,stroke-width:2px,color:#000</span><br><span class="line">    style C fill:#ff6348,stroke:#333,stroke-width:2px,color:#fff</span><br><span class="line">    style D fill:#f7b731,stroke:#333,stroke-width:2px,color:#000</span><br><span class="line">    style E fill:#f7b731,stroke:#333,stroke-width:2px,color:#000</span><br><span class="line">    style F fill:#3498db,stroke:#333,stroke-width:2px,color:#fff</span><br><span class="line">    style G fill:#2ecc71,stroke:#333,stroke-width:2px,color:#fff</span><br></pre></td></tr></table></figure>
+<h2 id="工作流-Mermaid-图"><a href="#工作流-Mermaid-图" class="headerlink" title="工作流 Mermaid 图"></a>工作流 Mermaid 图</h2><pre class="mermaid">flowchart TD
+    A["✍️ 博客作者"] -->|在线编辑/发布文章| B["Qexo 后台\n（Vercel 部署）"]
+    A -->|本地 git push| C["GitHub 私有仓库\n（Hexo 源码 + Markdown）"]
 
-<h2 id="完整流程图"><a href="#完整流程图" class="headerlink" title="完整流程图"></a>完整流程图</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    subgraph Private[&quot;🔒 GitHub 私有仓库&quot;]</span><br><span class="line">        direction TB</span><br><span class="line">        S1[&quot;Hexo 配置文件\n_config.yml / themes/&quot;]</span><br><span class="line">        S2[&quot;Markdown 文章\nsource/_posts/&quot;]</span><br><span class="line">        S3[&quot;GitHub Actions 工作流\n.github/workflows/deploy.yml&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Action[&quot;⚙️ GitHub Actions 流水线&quot;]</span><br><span class="line">        direction TB</span><br><span class="line">        A1[&quot;检出私有仓库源码&quot;]</span><br><span class="line">        A2[&quot;安装 Node.js &amp; Hexo&quot;]</span><br><span class="line">        A3[&quot;npm install 安装依赖&quot;]</span><br><span class="line">        A4[&quot;hexo generate 编译&quot;]</span><br><span class="line">        A5[&quot;推送静态文件到公有仓库&quot;]</span><br><span class="line">        A1 --&gt; A2 --&gt; A3 --&gt; A4 --&gt; A5</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Public[&quot;🌐 GitHub 公有仓库&quot;]</span><br><span class="line">        direction TB</span><br><span class="line">        P1[&quot;编译产物\n（index.html 等）&quot;]</span><br><span class="line">        P2[&quot;GitHub Pages 服务&quot;]</span><br><span class="line">        P1 --&gt; P2</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Qexo[&quot;🎨 Qexo（Vercel）&quot;]</span><br><span class="line">        direction TB</span><br><span class="line">        Q1[&quot;文章编辑器&quot;]</span><br><span class="line">        Q2[&quot;图片上传/管理&quot;]</span><br><span class="line">        Q3[&quot;主题/配置管理&quot;]</span><br><span class="line">        Q4[&quot;Vercel Serverless 部署&quot;]</span><br><span class="line">        Q1 &amp; Q2 &amp; Q3 --&gt; Q4</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    Qexo --&gt;|GitHub API 推送文章/图片| Private</span><br><span class="line">    Private --&gt;|on: push 触发| Action</span><br><span class="line">    Action --&gt;|force push 产物| Public</span><br><span class="line">    Public --&gt;|对外访问| H[&quot;🌍 读者访问博客&quot;]</span><br><span class="line"></span><br><span class="line">    style Private fill:#ff6348,stroke:#333,stroke-width:2px,color:#fff</span><br><span class="line">    style Action fill:#f7b731,stroke:#333,stroke-width:2px,color:#000</span><br><span class="line">    style Public fill:#3498db,stroke:#333,stroke-width:2px,color:#fff</span><br><span class="line">    style Qexo fill:#00d1b2,stroke:#333,stroke-width:2px,color:#000</span><br><span class="line">    style H fill:#2ecc71,stroke:#333,stroke-width:2px,color:#fff</span><br></pre></td></tr></table></figure>
+    B -->|API 推送文章| C
+
+    C -->|push 事件触发| D["GitHub Actions\n（自动编译流水线）"]
+
+    D -->|hexo generate| E["编译生成静态文件\n（HTML/CSS/JS）"]
+
+    E -->|git push --force| F["GitHub 公有仓库\n（静态站点产物）"]
+
+    F -->|GitHub Pages| G["🌍 博客网站\n（用户访问）"]
+
+    B -.->|管理/配置| C
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#00d1b2,stroke:#333,stroke-width:2px,color:#000
+    style C fill:#ff6348,stroke:#333,stroke-width:2px,color:#fff
+    style D fill:#f7b731,stroke:#333,stroke-width:2px,color:#000
+    style E fill:#f7b731,stroke:#333,stroke-width:2px,color:#000
+    style F fill:#3498db,stroke:#333,stroke-width:2px,color:#fff
+    style G fill:#2ecc71,stroke:#333,stroke-width:2px,color:#fff</pre>
+
+<h2 id="完整流程图"><a href="#完整流程图" class="headerlink" title="完整流程图"></a>完整流程图</h2><pre class="mermaid">flowchart LR
+    subgraph Private["🔒 GitHub 私有仓库"]
+        direction TB
+        S1["Hexo 配置文件\n_config.yml / themes/"]
+        S2["Markdown 文章\nsource/_posts/"]
+        S3["GitHub Actions 工作流\n.github/workflows/deploy.yml"]
+    end
+
+    subgraph Action["⚙️ GitHub Actions 流水线"]
+        direction TB
+        A1["检出私有仓库源码"]
+        A2["安装 Node.js & Hexo"]
+        A3["npm install 安装依赖"]
+        A4["hexo generate 编译"]
+        A5["推送静态文件到公有仓库"]
+        A1 --> A2 --> A3 --> A4 --> A5
+    end
+
+    subgraph Public["🌐 GitHub 公有仓库"]
+        direction TB
+        P1["编译产物\n（index.html 等）"]
+        P2["GitHub Pages 服务"]
+        P1 --> P2
+    end
+
+    subgraph Qexo["🎨 Qexo（Vercel）"]
+        direction TB
+        Q1["文章编辑器"]
+        Q2["图片上传/管理"]
+        Q3["主题/配置管理"]
+        Q4["Vercel Serverless 部署"]
+        Q1 & Q2 & Q3 --> Q4
+    end
+
+    Qexo -->|GitHub API 推送文章/图片| Private
+    Private -->|on: push 触发| Action
+    Action -->|force push 产物| Public
+    Public -->|对外访问| H["🌍 读者访问博客"]
+
+    style Private fill:#ff6348,stroke:#333,stroke-width:2px,color:#fff
+    style Action fill:#f7b731,stroke:#333,stroke-width:2px,color:#000
+    style Public fill:#3498db,stroke:#333,stroke-width:2px,color:#fff
+    style Qexo fill:#00d1b2,stroke:#333,stroke-width:2px,color:#000
+    style H fill:#2ecc71,stroke:#333,stroke-width:2px,color:#fff</pre>
 
 <h2 id="什么是-Hexo？"><a href="#什么是-Hexo？" class="headerlink" title="什么是 Hexo？"></a>什么是 Hexo？</h2><p><a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 是一个快速、简洁且高效的博客框架。 Hexo 使用 <a target="_blank" rel="noopener" href="http://daringfireball.net/projects/markdown/">Markdown</a>（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
 <h2 id="什么是Qexo？"><a href="#什么是Qexo？" class="headerlink" title="什么是Qexo？"></a>什么是Qexo？</h2><p><strong><a target="_blank" rel="noopener" href="https://oplog.cn/qexo">Qexo</a></strong> 是一个快速、强大、美观的在线 <strong>静态博客编辑器</strong>。使用 GPL3.0 <strong>开源</strong>协议。支持包括且不限于在 <strong>Vercel</strong> 等平台部署, 为您的静态博客添加<strong>动态</strong>的元素</p>
