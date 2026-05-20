@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 8.1.2">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,21 +17,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>分类 - Anchogin's Blog</title>
+  <title>RabbitMQ的使用与思考 - Anchogin's Blog</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="http://example.com/categories/">
+    <meta name="description" content="RabbitMQ的使用与思考一、什么是RabbitMQRabbitMQ是一种分布式消息中间件，也称消息队列（MQ），常见的其他消息队列有ActiveMQ、RabbitMQ、Kafka、RocketMQ、Pulsar等等 二、消息队列的作用既然RabbitMQ是消息队列的一种实现，那么消息队列又是干什么的，我们为什么要使用消息队列。 1、削峰填谷（常用及主要的场景）在特定行业中业务在不同的时间可能会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ的使用与思考">
+<meta property="og:url" content="http://example.com/2026/05/20/RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%80%9D%E8%80%83/">
 <meta property="og:site_name" content="Anchogin&#39;s Blog">
+<meta property="og:description" content="RabbitMQ的使用与思考一、什么是RabbitMQRabbitMQ是一种分布式消息中间件，也称消息队列（MQ），常见的其他消息队列有ActiveMQ、RabbitMQ、Kafka、RocketMQ、Pulsar等等 二、消息队列的作用既然RabbitMQ是消息队列的一种实现，那么消息队列又是干什么的，我们为什么要使用消息队列。 1、削峰填谷（常用及主要的场景）在特定行业中业务在不同的时间可能会">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-20T03:52:20.814Z">
+<meta property="article:modified_time" content="2026-05-20T03:52:21.059Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@anchogin">
   
   
   
-  
+  <meta name="keywords" content="RabbitMQ,Java">
 
   <!-- feed -->
   
@@ -43,12 +49,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"John Doe","sameAs":[]},"name":"Anchogin's Blog","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2026-05-20T03:52:20+00:00","dateModified":"2026-05-20T03:52:21+00:00","datePublished":"2026-05-20T03:52:20+00:00","description":"","headline":"RabbitMQ的使用与思考","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/05/20/RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%80%9D%E8%80%83/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2026/05/20/RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%80%9D%E8%80%83/","keywords":"RabbitMQ, Java","image":[]}</script>
   
 </head>
 <body>
 
-<div class="l_body index" id="start" layout="categories" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Anchogin's Blog</div></a></div></header>
@@ -60,44 +66,86 @@
 <div class="widgets">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
 
+
+
 <widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/05/20/hello-world/"><span class="title">Hello World</span></a><a class="item title" href="/2026/05/20/RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%80%9D%E8%80%83/"><span class="title">RabbitMQ的使用与思考</span></a><a class="item title" href="/2026/05/20/RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E9%97%AE%E9%A2%98/"><span class="title">RabbitMQ的使用与思考</span></a><a class="item title" href="/2026/05/20/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%95%B0%E5%80%BC%E7%B2%BE%E5%BA%A6%E4%B8%A2%E5%A4%B1/"><span class="title">前端大数值精度丢失</span></a><a class="item title" href="/2026/05/15/%E6%90%AD%E5%BB%BA%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2Hexo%E5%8D%9A%E5%AE%A2/"><span class="title">通过Github搭建Hexo博客</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Anchogin's Blog</div></a></div></header>
 
 
-  
-  
-  
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/">近期发布</a><a class="active" href="/categories/">分类</a><a href="/tags/">标签</a><a href="/archives/">归档</a></nav></div></div></div>
-  <div class='post-list'>
-    <article class='' id='cats'>
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Code/">Code</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-05-20T03:52:20.814Z">2026-05-20</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-05-20T03:52:21.059Z">2026-05-20</time></span></div></div></div>
+    
+    <div class="bottom only-title">
       
-        <div>
-          <a class="cat" href="/categories/Code/">
-            <span class='name'><svg style="margin-bottom:1px" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z" opacity=".5"/><path fill="currentColor" d="M20 6.238c0-.298-.005-.475-.025-.63a3 3 0 0 0-2.583-2.582C17.197 3 16.965 3 16.5 3H9.988c.116.104.247.234.462.45L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .849.352C14.098 6 14.675 6 15.829 6h.373c1.78 0 2.957 0 3.798.238"/><path fill="currentColor" fill-rule="evenodd" d="M12.25 10a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75" clip-rule="evenodd"/></svg>Code</span>
-            <span class='badge'>(3)</span>
-          </a>
-        </div>
-      
-        <div>
-          <a class="cat" href="/categories/%E9%83%A8%E7%BD%B2/">
-            <span class='name'><svg style="margin-bottom:1px" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z" opacity=".5"/><path fill="currentColor" d="M20 6.238c0-.298-.005-.475-.025-.63a3 3 0 0 0-2.583-2.582C17.197 3 16.965 3 16.5 3H9.988c.116.104.247.234.462.45L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .849.352C14.098 6 14.675 6 15.829 6h.373c1.78 0 2.957 0 3.798.238"/><path fill="currentColor" fill-rule="evenodd" d="M12.25 10a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75" clip-rule="evenodd"/></svg>部署</span>
-            <span class='badge'>(1)</span>
-          </a>
-        </div>
-      
-    </article>
+      <div class="text-area">
+        <h1 class="text title"><span>RabbitMQ的使用与思考</span></h1>
+        
+      </div>
+    </div>
+    
   </div>
+  </div><article class="md-text content"><h1 id="RabbitMQ的使用与思考"><a href="#RabbitMQ的使用与思考" class="headerlink" title="RabbitMQ的使用与思考"></a>RabbitMQ的使用与思考</h1><h2 id="一、什么是RabbitMQ"><a href="#一、什么是RabbitMQ" class="headerlink" title="一、什么是RabbitMQ"></a>一、什么是RabbitMQ</h2><p>RabbitMQ是一种分布式消息中间件，也称消息队列（MQ），常见的其他消息队列有ActiveMQ、RabbitMQ、Kafka、RocketMQ、Pulsar等等</p>
+<h2 id="二、消息队列的作用"><a href="#二、消息队列的作用" class="headerlink" title="二、消息队列的作用"></a>二、消息队列的作用</h2><p>既然RabbitMQ是消息队列的一种实现，那么消息队列又是干什么的，我们为什么要使用消息队列。</p>
+<h3 id="1、削峰填谷（常用及主要的场景）"><a href="#1、削峰填谷（常用及主要的场景）" class="headerlink" title="1、削峰填谷（常用及主要的场景）"></a>1、削峰填谷（常用及主要的场景）</h3><p>在特定行业中业务在不同的时间可能会出现比较大的波动，典型场景就是电商大促，大促期间商家的订单量一般会出现成倍的增加，系统的压力也会在这一时间段成倍增加，如果不进行合理资源分配，严重可能导致系统崩溃，带来巨大损失。再此场景下消息队列的削峰填谷就可以起大作用，将瞬时压力降下来，首先需要确定的是，这种场景下不要求绝对的实时性，也就是订单进入系统必须实时可以查询到，一般会有几分钟到数小时的容忍度，随单量变化，如果是强实时性的场景那就需要考虑其他方案，这就扯远了回归正题，我们可以预先根据系统能承载的压力设置一个阈值，超过阈值不进行处理，等待前面的任务处理完成时再接着处理，这样在瞬时压力下来时最多也就是到我们设置的阈值，避免一下子就把系统打崩造成不可估量的影响。</p>
+<h3 id="2、业务解耦（常用及主要的场景）"><a href="#2、业务解耦（常用及主要的场景）" class="headerlink" title="2、业务解耦（常用及主要的场景）"></a>2、业务解耦（常用及主要的场景）</h3><p>复杂的系统中一个流程可能需要多个业务的合作才能完成，如果全都聚合在一起执行，必然给系统复杂度带来调整，而且不同的业务也会产生相互影响，即一个业务产生问题会导致其他业务也中止；此时就可以把不同的业务进行拆分，通过MQ进行组合，这样哪怕其中一个业务出现问题，也不会影响其他业务的正常处理，可以进一步提高系统的可用性。</p>
+<h3 id="3、异步处理（业务解耦所带来的特性，解耦必然伴随着异步处理）"><a href="#3、异步处理（业务解耦所带来的特性，解耦必然伴随着异步处理）" class="headerlink" title="3、异步处理（业务解耦所带来的特性，解耦必然伴随着异步处理）"></a>3、异步处理（业务解耦所带来的特性，解耦必然伴随着异步处理）</h3><p>不同的服务之间调用可能耗时很长，此时可以通过消息进行通知，不必等待其他服务的响应，等其他服务处理完成时再发送一个完成消息，可以很大的提高性能。</p>
+<h3 id="4、数据分发（数据提供者把数据发布在队列内，需要的客户端可以按需订阅）"><a href="#4、数据分发（数据提供者把数据发布在队列内，需要的客户端可以按需订阅）" class="headerlink" title="4、数据分发（数据提供者把数据发布在队列内，需要的客户端可以按需订阅）"></a>4、数据分发（数据提供者把数据发布在队列内，需要的客户端可以按需订阅）</h3><p>示例：某电商平台把订单数据发送到MQ，由商家的服务提供商从MQ订阅队列获取对应的订单数据实现订单分发。</p>
+<h3 id="5、分布式事务"><a href="#5、分布式事务" class="headerlink" title="5、分布式事务"></a>5、分布式事务</h3><p>在单体应用中多个业务处理可以放在一个事务中，要么全成功，或者任意一个失败直接就可以回滚事务；但是在微服务应用中每个服务都是独立的，事务也是相互隔离的，此时某个服务的事务失败无法通知另一个服务的事务也进行失败，此时就可以通过MQ充当事务二次提交的中间层；比如在服务A事务成功时并不真正提交事务，而是把事务状态通知到MQ，再去调用服务B，如果服务B事务失败就可以把事务的失败状态通知到MQ，服务A获取到B的事务并没有成功，那么A的事务就进行回滚，如果B的事务成功了，再进行真正的事务提交。</p>
+<h2 id="三、使用中的问题"><a href="#三、使用中的问题" class="headerlink" title="三、使用中的问题"></a>三、使用中的问题</h2><p>虽然RabbitMQ有诸多优点，但如果使用不当也会造成资源的浪费，起到反向作用</p>
+<p>Java程序中通常使用Spring rabbit来简化开发，所以我们就针对Spring rabbit进行讨论</p>
+<h3 id="1、合理设置消费者数量"><a href="#1、合理设置消费者数量" class="headerlink" title="1、合理设置消费者数量"></a>1、合理设置消费者数量</h3><p>在业务激增的同时为了快速消费设置大量的消费者进行消费，但可能发现明明设置这么多消费者同时消费，但是消费速度却达不到预想的速度。</p>
+<p>在<code>Simple</code>模式下，增加消费者会导致线程的频繁切换，应该确定消费速度慢是属于IO问题还是计算问题，如果是计算问题，那么设置过多线程反而会导致系统线程不断切换造成开销，此时不应设置过多线程，如果是IO问题（文件、网络等）那么可以适当设置线程进行处理，避免线程处理空闲等待状态，应该根据具体业务进行分析。</p>
+<h3 id="2、尽量加快单次消费的速度"><a href="#2、尽量加快单次消费的速度" class="headerlink" title="2、尽量加快单次消费的速度"></a>2、尽量加快单次消费的速度</h3><p>其实消费慢更大的问题是由于单次消费慢导致整体吞吐量上不去，那么就需要排查是什么地方卡住导致的，根据经验，大多是sql语句或索引设置不当导致数据库慢查询，此时就应该优化查询sql或优化数据库索引；或者是由于外部调用因为网络波动导致的耗时，那么可以分析是否可以把这部分网络调用异步处理，后续的处理使用回调。</p>
+<h3 id="3、自定义消费线程池（重要）"><a href="#3、自定义消费线程池（重要）" class="headerlink" title="3、自定义消费线程池（重要）"></a>3、自定义消费线程池（重要）</h3><p>在消息监听容器<code>MessageListenerContainer</code>中，使用的线程池默认使用的是<code>SimpleAsyncTaskExecutor</code>，可以见方法<code>org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer#getTaskExecutor</code>，该线程池不重用线程，每次执行都会创建新线程，那么在高并发场景会大量消耗系统资源，因此需要使用自定义线程池。</p>
+<p><code>RabbitListenerContainerFactory</code>是创建<code>MessageListenerContainer</code>的工厂类，自定义线程池可以在实现<code>AbstractRabbitListenerContainerFactory</code>的子类如<code>SimpleRabbitListenerContainerFactory</code>或<code>DirectRabbitListenerContainerFactory</code>，手工指定<code>taskExecutor</code>，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SimpleRabbitListenerContainerFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleRabbitListenerContainerFactory</span>();</span><br><span class="line">factory.setTaskExecutor(<span class="keyword">new</span> <span class="title class_">ThreadPoolTaskExecutor</span>());</span><br></pre></td></tr></table></figure>
+
+<p>消费者获取RabbitMQ消息有两种方式，一种是主动去拉，消费者主动向MQ轮询去拉取消息；一种是被动推送，消费者向MQ注册监听器，当队列有消息时，MQ主动推送消息到消费者。在Spring rabbit中都是第二种模式，主动拉取消息除非主动调用<code>channel.basicGet</code>方法。</p>
+<p>spring <code>RabbitListener</code>注解可以绑定多个队列，<code>RabbitHandler</code>可以通过参数设置监听路由，一个<code>RabbitListener</code>中可以设置多个路由</p>
+<ul>
+<li><strong>SimpleMessageListenerContainer</strong>：通过线程池管理消费者，可以根据配置动态调整消费者数量。如果线程池设置不当可能会有较多的线程上下文切换，资源消耗比较高。适合消息量波动比较大的场景，可以根据负载自动扩缩容，灵活性较高。<code>concurrency</code>控制绑定队列创建的总消费者的动态数量，如设置5-10最少5个消费者，慢慢最大增加到10，设置10，固定设置到10个消费者，它尽可能的会保持较少的消费者数量，等同于设置<code>concurrentConsumers</code>和<code>maxConcurrentConsumers</code>；<code>prefetchCount</code>控制每个消费者一次请求获取的消息数量，减少网络开销；需要单独设置taskExecutor避免使用默认线程池。</li>
+<li><strong>DirectMessageListenerContainer</strong>：每个队列的消费者数量是固定的，除非主动更改参数，每个消费者由单个线程单独进行管理，没有线程池的调度开销，资源消耗更可控，适合高吞吐量、消息量波动小的场景。可通过<code>consumersPerQueue</code>控制每个队列的消费者数量；</li>
+</ul>
+<p><strong>SimpleMessageListenerContainer</strong>支持事务性<code>Channel</code>，<strong>DirectMessageListenerContainer</strong>不推荐使用事务性<code>Channel</code>，因为事务性<code>Channel</code>会同步阻塞导致消息吞吐量下降，就抵消了其性能优势。可以通过<code>channel.txSelect()</code>开启事务，<code>channel.txCommit()</code>提交事务，<code>channel.txRollback()</code>回滚事务，事务性<code>Channel</code>优点是保证原子性，缺点是性能开销大，可以与业务逻辑进行绑定，要么同时成功，要么同时失败，失败则不会被提交到队列。如果不是需要与业务强一致性的场景推荐使用发布确认机制，发布确认机制仅需保证消息的可靠投递，性能更高。</p>
+<h3 id="4、消息重复消费"><a href="#4、消息重复消费" class="headerlink" title="4、消息重复消费"></a>4、消息重复消费</h3><ul>
+<li>业务处理逻辑做幂等处理，确保消息多次消费不会产生副作用</li>
+<li>开启手动确认模式：不要使用自动ack，使用手工确认模式，确保业务处理完成后手动ack</li>
+</ul>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2026/05/20/hello-world/">Hello World</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/05/20/RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E9%97%AE%E9%A2%98/">RabbitMQ的使用与思考</a></div></section></div>
+
+
+
+
 
 
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RabbitMQ%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%80%9D%E8%80%83"><span class="toc-text">RabbitMQ的使用与思考</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFRabbitMQ"><span class="toc-text">一、什么是RabbitMQ</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">二、消息队列的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%89%8A%E5%B3%B0%E5%A1%AB%E8%B0%B7%EF%BC%88%E5%B8%B8%E7%94%A8%E5%8F%8A%E4%B8%BB%E8%A6%81%E7%9A%84%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-text">1、削峰填谷（常用及主要的场景）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%B8%9A%E5%8A%A1%E8%A7%A3%E8%80%A6%EF%BC%88%E5%B8%B8%E7%94%A8%E5%8F%8A%E4%B8%BB%E8%A6%81%E7%9A%84%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-text">2、业务解耦（常用及主要的场景）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86%EF%BC%88%E4%B8%9A%E5%8A%A1%E8%A7%A3%E8%80%A6%E6%89%80%E5%B8%A6%E6%9D%A5%E7%9A%84%E7%89%B9%E6%80%A7%EF%BC%8C%E8%A7%A3%E8%80%A6%E5%BF%85%E7%84%B6%E4%BC%B4%E9%9A%8F%E7%9D%80%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86%EF%BC%89"><span class="toc-text">3、异步处理（业务解耦所带来的特性，解耦必然伴随着异步处理）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%95%B0%E6%8D%AE%E5%88%86%E5%8F%91%EF%BC%88%E6%95%B0%E6%8D%AE%E6%8F%90%E4%BE%9B%E8%80%85%E6%8A%8A%E6%95%B0%E6%8D%AE%E5%8F%91%E5%B8%83%E5%9C%A8%E9%98%9F%E5%88%97%E5%86%85%EF%BC%8C%E9%9C%80%E8%A6%81%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%AF%E4%BB%A5%E6%8C%89%E9%9C%80%E8%AE%A2%E9%98%85%EF%BC%89"><span class="toc-text">4、数据分发（数据提供者把数据发布在队列内，需要的客户端可以按需订阅）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">5、分布式事务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">三、使用中的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AE%E6%B6%88%E8%B4%B9%E8%80%85%E6%95%B0%E9%87%8F"><span class="toc-text">1、合理设置消费者数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%B0%BD%E9%87%8F%E5%8A%A0%E5%BF%AB%E5%8D%95%E6%AC%A1%E6%B6%88%E8%B4%B9%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="toc-text">2、尽量加快单次消费的速度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B6%88%E8%B4%B9%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-text">3、自定义消费线程池（重要）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-text">4、消息重复消费</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
@@ -792,7 +840,35 @@
     }
   });
 </script>
+<script defer type="text/javascript" src="https://gcore.jsdelivr.net/npm/mermaid@v9/dist/mermaid.min.js"></script>
 <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    var mermaid_config = {
+      startOnLoad: true,
+      theme:
+        "auto" == "auto" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "neutral",
+      logLevel: 3,
+      themeVariables: {
+        darkMode: true
+      },
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true,
+        curve: "linear"
+      },
+      gantt: {
+        axisFormat: "%Y/%m/%d"
+      },
+      sequence: {
+        actorMargin: 50
+      }
+    }
+    mermaid.initialize(mermaid_config);
+  });
+</script><script>
   document.addEventListener('DOMContentLoaded', function () {
     window.codeElements = document.querySelectorAll('.code');
     if (window.codeElements.length > 0) {
